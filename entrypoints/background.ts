@@ -26,6 +26,8 @@ export default defineBackground({
         case 'parseCopiedText':
           let itemData = processCopiedData(message.text)
 
+          console.log(itemData)
+
           browser.storage.local.get('tradeStats', data => {
             if (data.tradeStats) {
               processItemDataWithTradeStats(itemData, data.tradeStats)
@@ -198,7 +200,7 @@ export default defineBackground({
     function constructJsonFromParsedData (parsedData) {
       const { baseType, sockets, poeInternalModifierValues, rarity } =
         parsedData
-        
+
       const isClusterJewel = baseType.includes('Cluster Jewel')
       const isTimelessJewel = baseType === 'Timeless Jewel'
 
@@ -390,6 +392,9 @@ export default defineBackground({
     // Main function to process the copied data
     function processCopiedData (text) {
       // Split the text into groups using '--------' as the delimiter
+      let class_regex = /Item Class: \w+.\w+.\w+.\w+/;
+      if (text.match(class_regex)) text = text.replace(text.match(class_regex)[0], '')
+      console.log(text.match(class_regex))
       const groups = text.split('--------').map(group => group.trim())
 
       // Initialize an object to hold the parsed data
