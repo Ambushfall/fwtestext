@@ -14,7 +14,7 @@ export default defineContentScript({
       anchor: '.inner',
       onMount: async container => {
         const settings: Settings = await storage.getItem('local:settings')
-        const { testing, darkMode, showAvatar, showHistory } = settings!
+        const testaronis = settings?.testing!
 
         var result = ''
         var arr = document.querySelectorAll('.inner')
@@ -48,14 +48,14 @@ export default defineContentScript({
             } ${remaining_number} Left</span>`
             element.innerHTML = resulting_string
             infoEl.setAttribute('data-ch', remaining_number?.toString()!)
-            if (testing) {
+            if (testaronis) {
               const outerElement = arr[i].parentNode as HTMLElement
               result += outerElement.innerHTML
             }
           }
         }
 
-        if (testing) {
+        if (testaronis) {
           let w = window.open()!
           let area = w.document.createElement('textarea')!
           area.value = result
