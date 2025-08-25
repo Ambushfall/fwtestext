@@ -1,22 +1,29 @@
-import { useState } from 'react';
-import './App.css';
-import { usePasteBinStore } from '@/hooks/usePasteBinStore';
+import { useState } from 'react'
+import './App.css'
+import { usePasteBinStore } from '@/hooks/usePasteBinStore'
 
-function App() {
+function App () {
   const [paste, setPaste, isPersistent, error, isInitialStateResolved] =
-    usePasteBinStore();
+    usePasteBinStore()
 
-    const handlePaste = (event: React.ClipboardEvent<HTMLTextAreaElement>) => {
+  const handlePaste = (event: React.ClipboardEvent<HTMLTextAreaElement>) => {
+    const text = event.clipboardData.getData('text/plain')
+    // console.log('Pasted text:', text);
+    browser.runtime.sendMessage(
+      { action: 'parseCopiedText', text },
+      response => {
+        console.log(response)
+        if (response.status === 'success') {
+          const newUrl = response.data
 
-        const pastedText = event.clipboardData.getData('text/plain');
-        console.log('Pasted text:', pastedText);
-        browser.storage.local.get('tradeStats', data => {
-          console.log(data)
-        })
-      };
-
-      
-
+          // Open the new URL in a new tab
+          window.open(newUrl, '_blank')
+        } else {
+          console.warn('Error:', response.error)
+        }
+      }
+    )
+  }
 
   return (
     <>
@@ -33,9 +40,9 @@ function App() {
         */}
         {paste}
       </div>
-      
+
       <h1>POE Pastebin</h1>
-      <div className="card">
+      <div className='card'>
         {/* <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
         </button>
@@ -44,11 +51,9 @@ function App() {
         </p> */}
         <textarea onPaste={handlePaste} id='pastebin'></textarea>
       </div>
-      <p className="read-the-docs">
-        Paste item from poe-ninja / pob
-      </p>
+      <p className='read-the-docs'>Paste item from poe-ninja / pob</p>
     </>
-  );
+  )
 }
 
-export default App;
+export default App

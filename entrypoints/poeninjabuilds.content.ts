@@ -60,8 +60,8 @@ function mainBuildContent (ctx) {
   // The function simulateCopyButtonClick is updated to use the new constructJsonFromParsedData
   function simulateCopyButtonClick(copyButton) {
     copyButton.click() // Simulate copy button click
-    navigator.clipboard.readText().then(async (text) => {
-      console.log('Copied text:', text) // Print the copied text to the console
+    navigator.clipboard.readText().then((text) => {
+      // console.log('Copied text:', text) // Print the copied text to the console
 
 
       browser.runtime.sendMessage(
@@ -74,7 +74,7 @@ function mainBuildContent (ctx) {
             // Open the new URL in a new tab
             window.open(newUrl, '_blank')
           } else {
-            console.error('Error:', response.error)
+            console.warn('Error:', response.error)
           }
         }
       )

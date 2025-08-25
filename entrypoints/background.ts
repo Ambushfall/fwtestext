@@ -33,7 +33,7 @@ export default defineBackground({
               const requestBody = constructJsonFromParsedData(itemData)
               checkAndSendPostRequest(requestBody, sender, sendResponse)
             } else {
-              console.error('No tradeStats found in storage.')
+              console.warn('No tradeStats found in storage.')
             }
           })
           // Send the request to the background script and wait for the new URL
@@ -58,14 +58,14 @@ export default defineBackground({
           })
         })
         .catch(error => {
-          console.error('Error fetching trade stats:', error)
+          console.warn('Error fetching trade stats:', error)
         })
     }
 
     // Helper function to construct headers for the POST request
     function constructHeaders (poeSessidCookie: string, refererUrl: string) {
       if (!poeSessidCookie) {
-        console.error('POESESSID cookie not found.')
+        console.warn('POESESSID cookie not found.')
         throw new Error('POESESSION MISSING')
       }
 
@@ -118,7 +118,7 @@ export default defineBackground({
         if (!response.ok) {
           // Log additional details if the response is not ok
           const responseText = await response.text()
-          console.error(
+          console.warn(
             'Failed to send POST request:',
             response.statusText,
             'Response Text:',
@@ -134,7 +134,7 @@ export default defineBackground({
         return data
       } catch (error) {
         // Log the error object in more detail
-        console.error('Error during POST request:', error)
+        console.warn('Error during POST request:', error)
         throw error
       }
     }
@@ -144,7 +144,7 @@ export default defineBackground({
       sender: Browser.runtime.MessageSender,
       sendResponse: (response?: any) => void
     ) {
-      console.log(`request body:`, requestBody)
+      // console.log(`request body:`, requestBody)
       browser.storage.local.get('league', result => {
         if (result.league) {
           league = result.league // Use the retrieved league
@@ -158,13 +158,6 @@ export default defineBackground({
                 league || ''
               }`
               const headers = constructHeaders(cookie.value, refererUrl)
-
-              fetch(`https://www.pathofexile.com/api/trade/data/leagues`)
-                .then(res => res.json())
-                .then(({ result }) => {
-                  let leagueArray = result.map((e: any) => e.id)
-                  leagueArray.forEach((e: any) => console.log(e))
-                })
 
               sendPostRequest(
                 `https://www.pathofexile.com/api/trade/search/${league}`,
@@ -184,13 +177,13 @@ export default defineBackground({
                   )
                 })
                 .catch(error => {
-                  console.error('POST request failed:', error)
+                  console.warn('POST request failed:', error)
                   return Promise.resolve(
                     sendResponse({ status: 'error', error: error.message })
                   )
                 })
             } else {
-              console.error('POESESSID cookie not found.')
+              console.warn('POESESSID cookie not found.')
               return Promise.resolve(
                 sendResponse({
                   status: 'error',
@@ -205,9 +198,7 @@ export default defineBackground({
     function constructJsonFromParsedData (parsedData) {
       const { baseType, sockets, poeInternalModifierValues, rarity } =
         parsedData
-
-      console.log(baseType, sockets, poeInternalModifierValues)
-
+        
       const isClusterJewel = baseType.includes('Cluster Jewel')
       const isTimelessJewel = baseType === 'Timeless Jewel'
 
@@ -810,14 +801,14 @@ export default defineBackground({
             !itemData.poeInternalModifierValues ||
             Object.keys(itemData.poeInternalModifierValues).length === 0
           ) {
-            console.error(
+            console.warn(
               'poeInternalModifierValues is empty after processing item data with trade stats:',
               itemData
             )
           } else {
           }
         } else {
-          console.error('No tradeStats found in storage.')
+          console.warn('No tradeStats found in storage.')
         }
       })
 

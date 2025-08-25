@@ -8,7 +8,7 @@ export default defineContentScript({
 
         // Use the league value as needed
       } else {
-        console.error('League is not set or not found in storage.')
+        console.warn('League is not set or not found in storage.')
       }
     })
 
@@ -23,7 +23,7 @@ export default defineContentScript({
       if (leagueFromPathOfExile) {
         browser.storage.local.set({ league: leagueFromPathOfExile }, () => {})
       } else {
-        console.error(
+        console.warn(
           'League could not be determined from the Path of Exile URL.'
         )
       }
