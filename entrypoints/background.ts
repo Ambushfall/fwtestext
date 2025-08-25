@@ -392,7 +392,7 @@ export default defineBackground({
     // Main function to process the copied data
     function processCopiedData (text) {
       // Split the text into groups using '--------' as the delimiter
-      let class_regex = /Item Class: \w+.\w+.\w+.\w+/;
+      let class_regex = /Item Class: \w+.\w+/;
       if (text.match(class_regex)) text = text.replace(text.match(class_regex)[0], '')
       console.log(text.match(class_regex))
       const groups = text.split('--------').map(group => group.trim())
