@@ -10,8 +10,6 @@ on:
   push:
     tags: 
       - "v*.*.*"
-    branches: [ "main" ]
-  workflow_dispatch:
 
 jobs:
   build-artifacts:
@@ -45,8 +43,10 @@ jobs:
       #     name: build-artifacts
       #     path: .output/
 
+      - name: Confirm files
+        run: ls .output
+        
       - name: Release
         uses: softprops/action-gh-release@v2.3.2
         with:
-          files: |
-            .output
+          files: .output
