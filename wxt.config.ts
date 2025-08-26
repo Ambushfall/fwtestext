@@ -16,5 +16,6 @@ export default defineConfig({
       'https://www.pathofexile.com/*',
       'https://pathofexile.com/*'
     ]
-  }
+  },
+  outDir: "dist"
 })
