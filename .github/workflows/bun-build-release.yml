@@ -44,7 +44,7 @@ jobs:
       #     path: dist/
 
       - name: Confirm files
-        run: ls .output
+        run: ls dist
 
       - name: Release
         uses: softprops/action-gh-release@v2.3.2
