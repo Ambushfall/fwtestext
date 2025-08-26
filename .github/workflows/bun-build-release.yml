@@ -49,4 +49,4 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v2.3.2
         with:
-          files: ./.output/chrome-mv3
+          files: .output/chrome-mv3
