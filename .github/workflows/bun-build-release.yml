@@ -45,8 +45,8 @@ jobs:
 
       - name: Confirm files
         run: ls .output
-        
+
       - name: Release
         uses: softprops/action-gh-release@v2.3.2
         with:
-          files: .output
+          files: ./.output/chrome-mv3
