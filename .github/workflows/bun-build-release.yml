@@ -3,6 +3,9 @@
 
 name: BUN Ci
 
+permissions:
+  contents: write
+
 on:
   push:
     tags: 
