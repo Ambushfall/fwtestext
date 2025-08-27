@@ -44,9 +44,9 @@ jobs:
       #     path: dist/
 
       - name: Prepare zip for release
-        run: cd dist;zip -r chrome-mv3.zip chrome-mv3/*
+        run: cd .output;zip -r chrome-mv3.zip chrome-mv3/*
 
       - name: Release
         uses: softprops/action-gh-release@v2.3.2
         with:
-          files: dist/chrome-mv3.zip
+          files: .output/chrome-mv3.zip
