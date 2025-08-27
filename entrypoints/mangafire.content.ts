@@ -14,7 +14,7 @@ export default defineContentScript({
       anchor: '.inner',
       onMount: async container => {
         const settings: Settings = await storage.getItem('local:settings')
-        const testaronis = settings?.testing!
+        const testaronis = settings?.testing! || false;
 
         var result = ''
         var arr = document.querySelectorAll('.inner')

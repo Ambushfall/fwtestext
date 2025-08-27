@@ -1,10 +1,9 @@
-import { useState } from 'react'
 import './App.css'
-import { usePasteBinStore } from '@/hooks/usePasteBinStore'
+import reactLogo from '~/assets/react.svg'
+import wxtLogo from '/wxt.svg'
+
 
 function App () {
-  const [paste, setPaste, isPersistent, error, isInitialStateResolved] =
-    usePasteBinStore()
 
   const handlePaste = (event: React.ClipboardEvent<HTMLTextAreaElement>) => {
     const text = event.clipboardData.getData('text/plain')
@@ -29,16 +28,16 @@ function App () {
     <>
       <div>
         {/* Logos go here */}
-        {/* 
+        
         <a href="https://wxt.dev" target="_blank">
           <img src={wxtLogo} className="logo" alt="WXT logo" />
         </a>
         <a href="https://react.dev" target="_blank">
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
-        EXAMPLE
-        */}
-        {paste}
+        {/* EXAMPLE */}
+       
+
       </div>
 
       <h1>POE Pastebin</h1>

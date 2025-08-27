@@ -1,18 +1,15 @@
 // @ts-nocheck
-import { useSettingsStore } from '@/hooks/useSettingsStore'
 export default defineBackground({
   // Set manifest options
   persistent: true,
 
   main () {
-
     let league: string | null = null // Define league at the global scope
 
     // Fetch and store trade stats when the extension is installed
     browser.runtime.onInstalled.addListener(() => fetchAndStoreStatsData())
     browser.runtime.onMessage.addListener(messageHandler)
-    console.log('hello')
-
+    
     function messageHandler (
       message: any,
       sender: Browser.runtime.MessageSender,
@@ -52,7 +49,6 @@ export default defineBackground({
 
     // Function to fetch and store trade stats data
     function fetchAndStoreStatsData (callback?: Function) {
-      console.log('hello')
       fetch('https://www.pathofexile.com/api/trade/data/stats')
         .then(response => response.json())
         .then(data => {
@@ -66,6 +62,8 @@ export default defineBackground({
         .catch(error => {
           console.warn('Error fetching trade stats:', error)
         })
+
+        chrome.runtime.openOptionsPage();
     }
 
     // Helper function to construct headers for the POST request
@@ -396,9 +394,8 @@ export default defineBackground({
     // Main function to process the copied data
     function processCopiedData (text) {
       // Split the text into groups using '--------' as the delimiter
-      let class_regex = /Item Class: \w+.\w+/
-      if (text.match(class_regex))
-        text = text.replace(text.match(class_regex)[0], '')
+      let class_regex = /Item Class: \w+.\w+/;
+      if (text.match(class_regex)) text = text.replace(text.match(class_regex)[0], '')
       console.log(text.match(class_regex))
       const groups = text.split('--------').map(group => group.trim())
 

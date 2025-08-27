@@ -14,6 +14,11 @@ export default function Options () {
     })
   }
 
+  useEffect(() => {
+    setSettings(settings);
+    console.log('hello')
+  }, [])
+
   return (
     <main>
       <div className='flex flex-col dark:bg-black dark:text-white bg-white text-black'>
