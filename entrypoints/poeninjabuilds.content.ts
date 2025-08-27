@@ -7,27 +7,27 @@ export default defineContentScript({
   }
 })
 
-function mainBuildContent (ctx) {
+async function mainBuildContent (ctx) {
   let ui = createIntegratedUi(ctx, {
     position: 'inline',
     // It observes the anchor
     anchor: 'div[data-floating-ui-portal]',
-    onMount: container => {
+    onMount: async container => {
       // Append children to the container
       // console.log('hello class addons version')
-      addTradeButtons()
+      await addTradeButtons()
       // init trade button
     }
   })
   ui.autoMount()
-  function addTradeButtons() {
+  async function addTradeButtons () {
     // Target general item containers (equipment, flasks)
     document
       .querySelectorAll('.group')
-      .forEach(itemGroup => addButtonToDiv(itemGroup))
+      .forEach(async itemGroup => await addButtonToDiv(itemGroup))
   }
 
-  function addButtonToDiv(itemDiv) {
+  async function addButtonToDiv (itemDiv) {
     const copyButton = itemDiv.querySelector('.button')
     if (copyButton && !itemDiv.querySelector('.trade-button')) {
       const parentElement = copyButton.parentElement
@@ -37,9 +37,13 @@ function mainBuildContent (ctx) {
       tradeButton.innerText = 'Trade'
 
       tradeButton.classList.add('trade-button')
-      if (backgroundSize !== 'calc(1 * var(--cellSize)) calc(1 * var(--cellSize))' &&
-        backgroundSize !== 'calc(1 * var(--cellSize)) calc(2 * var(--cellSize))' &&
-        parentElement.className !== 'group') {
+      if (
+        backgroundSize !==
+          'calc(1 * var(--cellSize)) calc(1 * var(--cellSize))' &&
+        backgroundSize !==
+          'calc(1 * var(--cellSize)) calc(2 * var(--cellSize))' &&
+        parentElement.className !== 'group'
+      ) {
         tradeButton.style.right = 'var(--s1)'
         tradeButton.style.left = null
       } else {
@@ -48,9 +52,9 @@ function mainBuildContent (ctx) {
         // tradeButton.style.top = null;
       }
       tradeButton.title = 'Search item in POE trade'
-      tradeButton.addEventListener('click', event => {
+      tradeButton.addEventListener('click', async event => {
         event.stopPropagation() // Stop the event from propagating
-        simulateCopyButtonClick(copyButton)
+        await simulateCopyButtonClick(copyButton)
       })
 
       copyButton.parentNode.appendChild(tradeButton)
@@ -58,28 +62,17 @@ function mainBuildContent (ctx) {
   }
 
   // The function simulateCopyButtonClick is updated to use the new constructJsonFromParsedData
-  function simulateCopyButtonClick(copyButton) {
+  async function simulateCopyButtonClick (copyButton) {
     copyButton.click() // Simulate copy button click
-    navigator.clipboard.readText().then((text) => {
-      // console.log('Copied text:', text) // Print the copied text to the console
+    let text = await navigator.clipboard.readText()
 
-
-      browser.runtime.sendMessage(
-        { action: 'parseCopiedText', text },
-        response => {
-          console.log(response);
-          if (response.status === 'success') {
-            const newUrl = response.data
-
-            // Open the new URL in a new tab
-            window.open(newUrl, '_blank')
-          } else {
-            console.warn('Error:', response.error)
-          }
-        }
-      )
-      
-    })
+    let {data, status, error} = await browser.runtime.sendMessage( { action: 'parseCopiedText', text } );
+    console.log(data);
+    if (status === 'success') {
+      const newUrl = data
+      window.open(newUrl, '_blank')
+    } else {
+      console.warn('Error:', error)
+    }
   }
-
 }
