@@ -52,7 +52,7 @@ export default defineBackground({
         console.warn("Error fetching trade stats:", error);
       }
 
-      browser.runtime.openOptionsPage();
+      // browser.runtime.openOptionsPage();
     }
 
     // Helper function to construct headers for the POST request
