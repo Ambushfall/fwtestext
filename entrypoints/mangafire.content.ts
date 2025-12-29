@@ -15,10 +15,11 @@ export default defineContentScript({
       onMount: async container => {
         const settings: Settings = await storage.getItem('local:settings')
         const testaronis = settings?.testing! || false;
-
+        
         var result = ''
         var arr = document.querySelectorAll('.inner')
-
+        
+        // debugger
         for (let i = 0; i < arr.length; i++) {
           const element: HTMLParagraphElement =
             arr[i].querySelector('.info > p')!
@@ -46,6 +47,10 @@ export default defineContentScript({
             }"> ${
               chapter_lang.includes('Chapter') ? 'Ch' : 'Vol'
             } ${remaining_number} Left</span>`
+            if(typeof remaining_number !== "undefined" && remaining_number == 0){
+              const outerElement = arr[i].parentNode as HTMLElement
+              outerElement.style.display='none';
+            }
             element.innerHTML = resulting_string
             infoEl.setAttribute('data-ch', remaining_number?.toString()!)
             if (testaronis) {
