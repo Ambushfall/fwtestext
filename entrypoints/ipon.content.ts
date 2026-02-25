@@ -1,8 +1,17 @@
 
 export default defineContentScript({
-  matches: ['*://iponcomp.com/shop/product/*'],
+  matches: ['*://iponcomp.com/shop/*'],
 
   main (ctx) {
+    ctx.addEventListener(window, 'wxt:locationchange', ({ newUrl }) => {
+      if (newUrl.search.includes('?') || newUrl.pathname.includes("group")) mountUiForSPA(ctx)
+    })
+    if (window.location.href.includes('product'))
+      mountUiForNonSPA(ctx)
+    if (window.location.href.includes('group'))
+      mountUiForNonSPA(ctx)
+
+// TODO: Lazy
     const ui = createIntegratedUi(ctx, {
       position: 'inline',
       // It observes the anchor
@@ -25,6 +34,18 @@ export default defineContentScript({
     })
 
     // Call autoMount to observe anchor element for add/remove.
-    ui.autoMount()
+    // ui.autoMount()
   }
 })
+
+
+function mountUiForNonSPA (
+  ctx: InstanceType<typeof ContentScriptContext>
+): void {
+  console.log("mounted for non spa")
+}
+
+
+function mountUiForSPA (ctx: InstanceType<typeof ContentScriptContext>): void {
+    console.log("mounted for spa")
+}

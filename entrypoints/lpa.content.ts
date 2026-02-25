@@ -81,7 +81,7 @@ async function mainWatchSPA (
         console.log(accountNumber)
         let totalToPay = `RSD${valueRow
           .querySelectorAll('td')!
-          [arrHeaderIndexes[1]].innerText.trim()}`
+          [arrHeaderIndexes[1]].innerText.trim().replace(".", "")}`
         console.log(totalToPay)
 
         let reqObj = buildBody(
