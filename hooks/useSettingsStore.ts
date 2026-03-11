@@ -6,7 +6,8 @@ const INITIAL_VALUE = {
     showAvatar: true,
     showHistory: false,
     darkMode: false,
-    testing: true
+    testing: true,
+    yt_preview_muted: true
 };
 
 export const useSettingsStore = createBrowserStorageStateHookLocal(SETTINGS_KEY, INITIAL_VALUE);
